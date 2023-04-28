@@ -118,7 +118,6 @@ class FormTerrain(Dialog[DialogResult]):
         layout.Rows.Add(row5)
         
         row6 = TableRow()
-        row6.Cells.Add(TableCell(self.confirm_panel(), True))
         row6.Cells.Add(TableCell(None, False, ScaleWidth=False))
         layout.Rows.Add(row6)
 
