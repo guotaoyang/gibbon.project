@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='initial-scale=1.0, user-scalable=no, width=device-width'>
+    <title>Gibbon Online By Amap</title>
+    <link rel='stylesheet' href='https://cache.amap.com/lbs/static/main1119.css' />
+    
+        <script type='text/javascript'>
+            window._AMapSecurityConfig = {
+                securityJsCode: 'dd4e7476006befeeb76bb75593c8cafe',
+            }
+        </script>
+
+        <script type='text/javascript' src='https://webapi.amap.com/maps?v=2.0&key=929bf8861e86d84cff410e20e25bb1ba&plugin=AMap.ControlBar,AMap.ToolBar,AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder'></script>
+        <link rel='stylesheet' href='https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css' />
+        <link rel='stylesheet' type='text/css' href='index.css'>
+    </head>
+
+<body>
+    <div id='container' class='map' style='width:100%;height:100%'></div>
+
+    <div class='input-card' style='width:40%;height:10%;top:5%;left:5%;min-width:400px'>
+        <div class='input-item-prepend'><span class='input-item-text'>高德搜索</span></div>
+        <input id='search' type='text' value='请输入关键字...'>
+    </div>
+
+    <div class='input-item' style='width:40%;height:10%;top:85%;left:5%;min-width:400px>
+            <span class='input-item-text'>地图经度</span>
+            <input id='lng' disabled type='text' value='112.909374'>&nbsp&nbsp&nbsp&nbsp
+            <span class='input-item-text'>地图纬度</span>
+            <input id='lat' disabled type='text' value='28.126375'>
+    </div>
+
+    <!-- 地图尺寸数量	-->
+    <input id='zoom' type='text' value='19' onchange='zoomChanged()'>
+
+    <!-- 瓦片数量	-->
+    <input type='text' id='quantity' value='2' onchange='quantityChanged()'>
+    <script type='text/javascript' src='index.js'></script>
+</body>
+</html>

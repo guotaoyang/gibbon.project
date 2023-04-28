@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='initial-scale=1.0, user-scalable=no, width=device-width'>
+    <title>Gibbon Online By Amap</title>
+    <link rel='stylesheet' href='https://cache.amap.com/lbs/static/main1119.css' />
+
+      <script type='text/javascript'>
+            window._AMapSecurityConfig = {
+                securityJsCode: 'dd4e7476006befeeb76bb75593c8cafe',
+            }
+        </script>
+
+    <script type='text/javascript' src='https://webapi.amap.com/maps?v=2.0&key=929bf8861e86d84cff410e20e25bb1ba&plugin=AMap.ControlBar,AMap.ToolBar,AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder'></script>
+    <link rel='stylesheet' href='https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css' />
+    <style>
+      #map-container {
+        height: 100%;
+        width: 100%;
+      }
+      .info hr {
+    margin-right: 0;
+    margin-left: 0;
+    border-top-color: grey;
+    }
+
+    .info {
+        padding: .75rem 1.25rem;
+        margin-bottom: 1rem;
+        border-radius: .25rem;
+        position: fixed;
+        top: 1rem;
+        background-color: white;
+        width: auto;
+        min-width: 22rem;
+        border-width: 0;
+        right: 1rem;
+        box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+    }
+
+    .code {
+        left: 1.5rem;
+        right: 1.5rem;
+        top: 1.5rem;
+        bottom: 1.5rem;
+        overflow: auto;
+        margin-bottom: 0rem;
+    }
+
+        .code .btn {
+            top: 1rem;
+            position: absolute;
+            right: 1rem;
+        }
+
+        .code .result {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            bottom: 1rem;
+            position: absolute;
+            top: 5.5rem;
+            right: 1rem;
+            left: 1rem;
+            overflow: auto;
+        }
+
+        .code .status {
+            color: #80adff;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .code h4 {
+            display: inline-block;
+            max-width: 20rem;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+    select,
+    input[type=text],
+    input[type=date],
+    input[type=number] {
+        display: inline-block;
+        width: 100%;
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.5;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none
+    }
+
+    input[type=text],
+    input[type=date],
+    input[type=number] {
+        background: #fff;
+        padding: .375rem .75rem;
+    }
+
+        select:focus,
+        input[type=text]:focus,
+        input[type=date]:focus,
+        input[type=number]:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 .1rem rgba(128, 189, 255, .1)
+        }
+
+    .btn:focus {
+        outline: 0;
+        box-shadow: none;
+    }
+
+    select:focus::-ms-value,
+    input[type=text]:focus::-ms-value,
+    input[type=date]:focus::-ms-value,
+    input[type=number]:focus::-ms-value {
+        color: #495057;
+        background-color: #fff
+    }
+    /* native toastr */
+
+    .native-toast {
+        position: fixed;
+        background-color: rgba(50, 50, 50, .8);
+        border-radius: 33px;
+        color: white;
+        left: 50%;
+        text-align: center;
+        padding: 6px 12px;
+        opacity: 0;
+        z-index: 99999;
+        transition: transform .25s, opacity .25s, top .25s;
+        box-sizing: border-box;
+    }
+
+    .native-toast-bottom {
+        bottom: 50px;
+        -ms-transform: translateX(-50%) translateY(50px);
+        transform: translateX(-50%) translateY(50px)
+    }
+
+        .native-toast-bottom.native-toast-shown {
+            opacity: 1;
+            -ms-transform: translateX(-50%) translateY(0);
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .native-toast-bottom.native-toast-edge {
+            bottom: 0;
+        }
+
+    .native-toast-top {
+        top: 50px;
+        -ms-transform: translateX(-50%) translateY(-50px);
+        transform: translateX(-50%) translateY(-50px)
+    }
+
+        .native-toast-top.native-toast-shown {
+            opacity: 1;
+            -ms-transform: translateX(-50%) translateY(0);
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .native-toast-top.native-toast-edge {
+            top: 0;
+        }
+
+    .native-toast-center {
+        top: 0;
+        -ms-transform: translateX(-50%) translateY(-50px);
+        transform: translateX(-50%) translateY(-50px)
+    }
+
+        .native-toast-center.native-toast-shown {
+            opacity: 1;
+            top: 50%;
+            -ms-transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%);
+        }
+
+    .native-toast-edge {
+        border-radius: 0;
+        width: 100%;
+        text-align: left;
+    }
+
+    @media screen and (min-width: 40rem) {
+        .native-toast:not(.native-toast-edge) {
+            max-width: 18rem;
+        }
+    }
+
+    .native-toast-error {
+        background-color: #d92727;
+        color: white;
+    }
+
+    .native-toast-success {
+        background-color: #62a465;
+        color: white;
+    }
+
+    .native-toast-warning {
+        background-color: #fdaf17;
+        color: white;
+    }
+
+    .native-toast-info {
+        background-color: #5060ba;
+        color: white;
+    }
+
+    [class^="native-toast-icon-"] {
+        vertical-align: middle;
+        margin-right: 8px
+    }
+
+        [class^="native-toast-icon-"] svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        </style>
+  </head>
+  <body>
+    <div id="map-container"></div>
+
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=d8fd4aa81f7ac7a489d11a7db9995ffc"></script>
+    <script>
+        const defaultLocation = [112.909374, 28.126375];
+        const defaultZoom = 19;
+        const defaultQuantity = 2;
+        const mercator = 20037508.34 / 180;
+        const defaultZooms = [2, 20]
+        const defaultRotation = -15
+      // 初始化地图对象，设置中心点和缩放级别
+      var map = new AMap.Map("map-container", {
+          rotateEnable: true,
+          pitchEnable: true,
+          pitch: 50,
+          rotation: defaultRotation,
+          viewMode: '3D', //开启3D视图,默认为关闭
+          center: defaultLocation,
+          zooms: defaultZooms,
+          zoom: defaultZoom,
+          features: ['bg', 'road', 'building', 'point']
+      });
+var autoOptions = {
+        input: "search"
+    };
+
+    AMap.plugin(['AMap.PlaceSearch', 'AMap.AutoComplete'], function () {
+        var auto = new AMap.AutoComplete(autoOptions);
+        var placeSearch = new AMap.PlaceSearch({
+            map: map
+        }); //构造地点查询类
+
+    auto.on("select", select); //注册监听，当选中某条记录时会触发
+    function select(e) {
+        console.log(e.poi.location)
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name); //关键字查询查询
+        var gcjLngLat = [e.poi.location.lng, e.poi.location.lat];
+        console.log(gcjLngLat)
+        searchfunc(gcjLngLat)
+    }
+});
+
+// 选择后跳转
+function searchfunc(gcjLngLat) {
+    currlng = gcjLngLat[0];
+    currlat = gcjLngLat[1];
+    document.getElementById("lng").value = currlng;
+    document.getElementById("lat").value = currlat;
+    geocoder.getAddress(gcjLngLat, function (status, result) {
+        if (status === 'complete' && result.regeocode) {
+            var address = result.regeocode.formattedAddress;
+
+            // 更新坐标及地图位置
+            marker.setPosition(gcjLngLat);
+            marker.setTitle("GCJ: " + gcjLngLat);
+            marker.setLabel({
+                content: "<div id='label'>" + address + "</div>"
+            });
+
+        } else {
+            console.log('根据经纬度查询地址失败...')
+        }
+    });
+
+    var data = getBounds(gcjLngLat);
+    polygon.setPath(data);
+    var zoom = getZoom()
+    map.setZoomAndCenter(zoom, gcjLngLat, false)
+}
+
+
+
+//绑定radio点击事件
+var radios = document.querySelectorAll("#map-styles input");
+radios.forEach(function (ratio) {
+    ratio.onclick = setMapStyle;
+});
+
+
+
+function setMapStyle() {
+    var styleName = "amap://styles/" + this.value;
+    map.setMapStyle(styleName);
+}
+
+
+//设置地图显示要素
+function setMapFeatures() {
+    var features = [];
+    var inputs = document.querySelectorAll("#map-features input");
+    inputs.forEach(function (input) {
+        if (input.checked) {
+            features.push(input.value);
+        }
+    });
+    map.setFeatures(features);
+}
+
+//绑定checkbox点击事件
+var inputs = document.querySelectorAll("#map-features input");
+inputs.forEach(function (checkbox) {
+    checkbox.onclick = setMapFeatures;
+});
+
+
+
+function degree2radians(degree) {
+    return degree * (Math.PI / 180);
+}
+
+function radians2degree(radians) {
+    return radians * (180 / Math.PI);
+}
+
+function lnglat2xyz(lng, lat, z) {
+    var n = Math.pow(2, z);
+    var x = parseInt((lng + 180.0) / 360.0 * n);
+    var lat_rad = degree2radians(lat);
+    var y = parseInt((1.0 - Math.asinh(Math.tan(lat_rad)) / Math.PI) / 2.0 * n);
+
+    return [x, y, z];
+}
+
+function xyz2lnglat(x, y, z) {
+    var n = Math.pow(2, z);
+    var lng = x / n * 360.0 - 180.0;
+
+    var lat_rad = Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n)))
+    var lat = radians2degree(lat_rad);
+    return [lng, lat];
+}
+
+function zoom2size(zoom) {
+    return 78271516 * Math.pow(2, -zoom - 1);
+}
+
+function mct2lnglat(mct, origin) {
+    var x = mct[0] / mercator;
+    var y = mct[1] / mercator;
+
+    y = 180 / Math.PI * (2 * Math.atan(Math.exp(y * Math.PI / 180)) - Math.PI / 2);
+    x += origin[0];
+    y += origin[1];
+
+    return [x, y];
+}
+
+function getLngLat(e) {
+    return [e.lnglat.getLng(), e.lnglat.getLat()];
+};
+
+function refreshLngLat(e) {
+    var gcjLngLat = getLngLat(e);
+
+    document.getElementById("lng").value = gcjLngLat[0];
+    document.getElementById("lat").value = gcjLngLat[1];
+};
+
+
+// zoom 变化函数
+function zoomChanged() {
+    var data = getBounds([currlng, currlat]);
+    polygon.setPath(data);
+};
+
+
+// 获取 zoom 值
+function getZoom() {
+    if (document.getElementById("zoom").value) { return parseInt(document.getElementById("zoom").value) }
+    else { return defaultZoom }
+}
+
+// 瓦片 变化函数var
+
+    function getQuantity() {
+
+    return parseInt(document.getElementById("quantity").value)
+    }
+
+
+    function quantityChanged() {
+
+    var data = getBounds([currlng, currlat]);
+    polygon.setPath(data);
+    }
+
+    function getBounds(lnglat) {
+    var quantity = 2;
+    var zoom = 19;
+    var xyz = lnglat2xyz(lnglat[0], lnglat[1], zoom);
+    var origin = xyz2lnglat(xyz[0], xyz[1], xyz[2]);
+
+    var size = zoom2size(zoom);
+
+
+    var p1 = [size * quantity / 2, size * quantity / 2];
+    var p2 = [size * quantity / 2, -size * quantity / 2];
+    var p3 = [-size * quantity / 2, -size * quantity / 2];
+    var p4 = [-size * quantity / 2, size * quantity / 2];
+
+    var lnglat1 = mct2lnglat(p1, origin);
+    var lnglat2 = mct2lnglat(p2, origin);
+    var lnglat3 = mct2lnglat(p3, origin);
+    var lnglat4 = mct2lnglat(p4, origin);
+
+    return [lnglat1, lnglat2, lnglat3, lnglat4];
+    }
+
+    function onNumberChanged() {
+        var lng = parseInt(document.getElementById("lng").value);
+        var lat = parseInt(document.getElementById("lat").value);
+        var data = getBounds([lng, lat]);
+        polygon.setPath(data);
+    }
+
+    // 创建新地图
+    var map = new AMap.Map('container', {
+        rotateEnable: true,
+        pitchEnable: true,
+        pitch: 50,
+        rotation: -15,
+        viewMode: '3D', //开启3D视图,默认为关闭
+        center: defaultLocation,
+        zooms: [2, 20],
+        zoom: defaultZoom
+    });
+
+    var data = getBounds(defaultLocation);
+
+    var polygon = new AMap.Polygon({
+        path: data,
+        fillColor: '#ccebc5',
+        strokeOpacity: 1,
+        fillOpacity: 0.5,
+        strokeColor: '#2b8cbe',
+        strokeWeight: 1,
+        strokeStyle: 'dashed',
+        strokeDasharray: [5, 5],
+    });
+    polygon.on('mouseover', () => {
+        polygon.setOptions({
+            fillOpacity: 0.7,
+            fillColor: '#7bccc4'
+        })
+    })
+    polygon.on('mouseout', () => {
+        polygon.setOptions({
+            fillOpacity: 0.5,
+            fillColor: '#ccebc5'
+        })
+    })
+    map.add(polygon);
+
+    // 添加 3D 地图控件
+    var controlBar = new AMap.ControlBar({
+        position: {
+            right: '40px',
+            top: '40px'
+        }
+    });
+    controlBar.addTo(map);
+
+    var geocoder = new AMap.Geocoder({});
+
+    // 设置点击标记
+    var marker = new AMap.Marker({
+        position: defaultLocation,
+        icon: 'https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+        anchor: 'bottom-center',
+        offset: new AMap.Pixel(0, 0),
+        draggable: true
+    });
+
+    // 设置label标签
+    // label默认蓝框白底左上角显示，样式className为：amap-marker-label
+    marker.setLabel({
+        direction: 'center',
+        offset: new AMap.Pixel(10, 0), //设置文本标注偏移量
+        content: "<div id='label'>中建五局设计技术科研院 vctcn93</div>", //设置文本标注内容
+    });
+
+    // 将标记加入地图
+    marker.setMap(map);
+
+
+
+    // 点击事件函数
+    function clickfunc(e) {
+        // 更新坐标及地图位置
+        var gcjLngLat = getLngLat(e);
+        currlng = gcjLngLat[0];
+        currlat = gcjLngLat[1];
+        document.getElementById("lng").value = currlng;
+        document.getElementById("lat").value = currlat;
+        geocoder.getAddress(gcjLngLat, function (status, result) {
+            if (status === 'complete' && result.regeocode) {
+                var address = result.regeocode.formattedAddress;
+
+                // 更新坐标及地图位置
+                marker.setPosition(gcjLngLat);
+
+                marker.setTitle("GCJ: " + gcjLngLat);
+                marker.setLabel({
+                    content: "<div id='label'>" + address + "</div>"
+                });
+
+            } else {
+                console.log('根据经纬度查询地址失败...')
+            }
+        });
+
+        var data = getBounds(gcjLngLat);
+        polygon.setPath(data);
+        console.log(data);
+        map.setFitView();
+
+    }
+
+    // 拖拽事件函数
+    function dragendfunc(e) {
+        // 更新坐标及地图位置
+
+        var gcjLngLat = getLngLat(e);
+        currlng = gcjLngLat[0];
+        currlat = gcjLngLat[1];
+        document.getElementById("lng").value = currlng;
+        document.getElementById("lat").value = currlat;
+        geocoder.getAddress(gcjLngLat, function (status, result) {
+            if (status === 'complete' && result.regeocode) {
+                var address = result.regeocode.formattedAddress;
+
+                // 更新坐标及地图位置
+                marker.setPosition(gcjLngLat);
+
+                marker.setTitle("GCJ: " + gcjLngLat);
+                marker.setLabel({
+                    content: "<div id='label'>" + address + "</div>"
+                });
+
+            } else {
+                console.log('根据经纬度查询地址失败...')
+            }
+        });
+
+        var data = getBounds(gcjLngLat);
+        polygon.setPath(data);
+        map.setFitView();
+
+    };
+
+    map.on('click', clickfunc);
+    marker.on('dragend', dragendfunc);
+    
+    </script>
+    <div class='input-card' style='width:40%;height:10%;top:5%;left:5%;min-width:400px'>
+        <div class='input-item-prepend'><span class='input-item-text'>高德搜索</span></div>
+        <input id='search' type='text' value='请输入关键字...'>
+        <div class='input-item' style='width:40%;height:10%;top:700px;left:5%;min-width:500px'>
+            <span class='input-item-text'>地图经度</span>
+            <input id='lng' disabled type='text' value='112.909374'>&nbsp&nbsp&nbsp&nbsp
+            <span class='input-item-text'>地图纬度</span>
+            <input id='lat' disabled type='text' value='28.126375'>
+    </div>
+    </div>
+
+    <input id='zoom' type='text' value='19' onchange='zoomChanged()'>
+
+    <!-- 瓦片数量	-->
+    <input type='text' id='quantity' value='2' onchange='quantityChanged()'>
+  </body>
+</html>
